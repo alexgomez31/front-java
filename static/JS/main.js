@@ -1,16 +1,12 @@
-// main.js
-
 $(document).ready(function() {
-   
     cargarDatos();
-   
 });
+
 function cargarDatos() {
     $.ajax({
-        url: 'http://localhost:8080/Api/personas', 
+        url: 'http://localhost:8080/Api/personas',
         dataType: 'json',
         success: function(data) {
-         
             mostrarDatosEnTabla(data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -19,32 +15,21 @@ function cargarDatos() {
     });
 }
 
-
 function mostrarDatosEnTabla(datos) {
     var tabla = $('#tabla-artistas');
-
-    
     tabla.empty();
 
-  
     $.each(datos, function(index, artista) {
         var fila = '<tr>' +
             '<td>' + artista.nombre + '</td>' +
             '<td>' + artista.genero + '</td>' +
             '<td>' + artista.descripcion + '</td>' +
-         
-           
-            '<td><button class="btn btn-danger" onclick="eliminar(' + artista.id + ')">eliminar</button></td>' +
-        
-            '<td><button class="btn btn-primary" onclick="cargarDatosParaEditar(' + artista.id + ')">actualizar</button></td>'
-
-
-
+            '<td><button class="btn btn-danger" onclick="eliminar(' + artista.id + ')">Eliminar</button></td>' +
+            '<td><button class="btn btn-primary" onclick="cargarDatosParaEditar(' + artista.id + ')">Editar</button></td>' +
             '</tr>';
         tabla.append(fila);
     });
 }
-
 
 function crearPersona(id) {
     if (id) {
@@ -96,15 +81,14 @@ function actualizar(id) {
     });
 }
 
-
 function eliminar(id) {
     if (confirm('¿Estás seguro de que deseas eliminar el registro?')) {
         $.ajax({
-            url: 'http://localhost:8080/Api/personas/eliminar/' + id, 
+            url: 'http://localhost:8080/Api/personas/eliminar/' + id,
             type: 'DELETE',
             success: function(response) {
                 alert('Persona eliminada exitosamente');
-                cargarDatos(); 
+                cargarDatos();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log('Error en la solicitud AJAX:', textStatus, errorThrown);
@@ -112,8 +96,6 @@ function eliminar(id) {
         });
     }
 }
-
-
 
 function limpiarFormulario() {
     $('#id').val('');
@@ -124,34 +106,10 @@ function limpiarFormulario() {
     $('#btnCrear').text('Crear');
     $('#btnCrear').attr('onclick', 'crearPersona()');
 }
-function mostrarDatosParaEditar(id) {
-    $.ajax({
-        url: 'http://localhost:8080/Api/personas/' + id, 
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            if (data) {
-                $('#id').val(data.id);
-                $('#nombre').val(data.nombre);
-                $('#genero').val(data.genero);
-                $('#descripcion').val(data.descripcion);
-
-               
-                cargarDatosParaEditar(id);
-            } else {
-                alert('No se encontraron datos para editar.');
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log('Error en la solicitud AJAX:', textStatus, errorThrown);
-        }
-    });
-}
-
 
 function cargarDatosParaEditar(id) {
     $.ajax({
-        url: 'http://localhost:8080/Api/personas/' + id, 
+        url: 'http://localhost:8080/Api/personas/' + id,
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -174,8 +132,3 @@ function cargarDatosParaEditar(id) {
         }
     });
 }
-
-
-
-
-
